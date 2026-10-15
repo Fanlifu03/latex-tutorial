@@ -22,14 +22,14 @@
 需要 **XeLaTeX**（文档使用 `ctexart` 中文文档类）：
 
 ```bash
-xelatex 简明Letax教程.tex
-xelatex 简明Letax教程.tex   # 跑两遍，目录条目与页码才正确
+xelatex 简明LaTeX教程.tex
+xelatex 简明LaTeX教程.tex   # 跑两遍，目录条目与页码才正确
 ```
 
 或者用 `latexmk` 一次跑够遍数：
 
 ```bash
-latexmk -xelatex 简明Letax教程.tex
+latexmk -xelatex 简明LaTeX教程.tex
 ```
 
 环境要求：TeX Live 或 MiKTeX，并安装 `ctex`、`tabularray`、`tikz`/`pgf`、`beamer`、`cleveref` 等宏包。
