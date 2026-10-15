@@ -1,0 +1,94 @@
+% 文件名：简明Letax教程.tex
+% 编译命令：xelatex 简明Letax教程.tex
+% 再编译一次：xelatex 简明Letax教程.tex
+% 目的：第一次生成目录信息，第二次目录页码和条目才正确
+
+\documentclass[12pt,a4paper]{ctexart}  % 中文 article 文档类
+
+\usepackage{xcolor}
+\usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue, citecolor=blue]{hyperref}  % 让目录可以点击跳转，并生成 PDF 书签
+
+%\usepackage[hidelinks]{hyperref} 无边框%
+%\usepackage[linkbordercolor={1 1 1}]{hyperref} 边框为白色%
+
+\setcounter{tocdepth}{1}      % 目录显示深度：1 表示显示到 section
+\setcounter{secnumdepth}{1}   % 标题编号深度：1 表示 section 也编号
+
+\title{简明LeTax教程}      % 文档大标题
+\author{}                 % 作者
+\date{}                   % 日期
+
+\begin{document}
+
+\maketitle                    % 生成标题页：标题、作者、日期
+\clearpage                    % 另起一页，避免正文接在标题页后面  
+
+\tableofcontents              % 生成目录
+\clearpage                   % 目录后另起一页，避免正文接在目录后面
+
+\section{源代码结构}          % 一级标题 
+\section{标题、作者、日期}  % 一级标题
+\section{换行、分段、空格}
+\section{居中、取消缩进、行距}
+\section{字号与字体}
+\section{下划线与颜色}
+\section{纸张与边距}
+\section{分页与分栏}
+\section{摘要摘录脚注边注}
+\section{盒子}
+\section{自定义命令}
+\section{插入图片}
+\section{浮动体与图片排版}
+\section{图片引用}
+\section{有序列表无序列表描述环境}
+\section{一些空格与填充}
+\section{简单表格-tabular}
+\section{表格浮动环境与表格引用}
+\section{一些表格样式}
+\section{三线表}
+\section{自动变宽表格-tabularx}
+\section{形式表格-tabularray}
+\section{表格-换行与Q格式}
+\section{表格-变宽}
+\section{表格-行列设置分离}
+\section{表格-框线样式颜色}
+\section{表格-按行列绘制边框线}
+\section{表格-多边框线}
+\section{表格-自由绘制边框线}
+\section{表格-设置行列样式}
+\section{表格-单元格合并于样式}
+\section{tabularray于三线表}
+\section{长表格-longtblr}
+\section{横向表格（宽表）}
+\section{关于表格的一些补充}
+\section{数字模式与公式引用}
+\section{分式与根式}
+\section{公式-上下标}
+\section{公式-上下线}
+\section{公式-求和与公式样式调整}
+\section{公式-积分}
+\section{公式-矩阵}
+\section{公式-多行公式}
+\section{公式-分支公式}
+\section{公式-定理环境与clevere引用}
+\section{章节标题与目录}
+\section{文档结构-前言正文附录后记}
+\section{文档拆分}
+\section{页眉页脚}
+\section{参考文献}
+\section{索引}
+\section{TikZ-绘图 直线 坐标}
+\section{TikZ-基本图形绘制}
+\section{TikZ-线条样式}
+\section{TikZ-scope环境、样式复用}
+\section{TikZ-形变}
+\section{TikZ-绘制与填充}
+\section{TikZ-文字节点}
+\section{TikZ-循环绘制与坐标轴}
+\section{TikZ-绘制函数图像}
+\section{初识beamer幻灯片}
+\section{CTeX补充内容}
+\section{一些目录样式}
+\section{为页面设置背景图片}
+\section{cutwin文字环绕排版}
+\end{document}
