@@ -6,89 +6,293 @@
 \documentclass[12pt,a4paper]{ctexart}  % 中文 article 文档类
 
 \usepackage{xcolor}
-\usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue, citecolor=blue]{hyperref}  % 让目录可以点击跳转，并生成 PDF 书签
+\usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue, citecolor=blue]{hyperref}
+\usepackage{booktabs}   % 三线表
+\usepackage{tabularx}   % 自动变宽表格
+\usepackage{geometry}   % 页边距
+\geometry{margin=2.5cm}
 
-%\usepackage[hidelinks]{hyperref} 无边框%
-%\usepackage[linkbordercolor={1 1 1}]{hyperref} 边框为白色%
+% 不想显示颜色边框，可以用下面任一种替代 hyperref 的加载方式：
+% \usepackage[hidelinks]{hyperref}                       % 无边框
+% \usepackage[linkbordercolor={1 1 1}]{hyperref}          % 边框为白色
 
 \setcounter{tocdepth}{1}      % 目录显示深度：1 表示显示到 section
-\setcounter{secnumdepth}{1}   % 标题编号深度：1 表示 section 也编号
+\setcounter{secnumdepth}{1}   % 标题编号深度：1 表示 section 编号
 
-\title{简明LaTeX教程}      % 文档大标题
-\author{}                 % 作者
-\date{}                   % 日期
+\title{简明LaTeX教程}
+\author{}
+\date{}
 
 \begin{document}
 
-\maketitle                    % 生成标题页：标题、作者、日期
-\clearpage                    % 另起一页，避免正文接在标题页后面  
+% 避免 Overfull \hbox 警告：允许 TeX 在实在断不开的长行上多拉伸一点词间距。
+% 只在"无法正常断行"的那几行生效，不会影响其他段落的正常排版。
+\setlength{\emergencystretch}{3em}
 
-\tableofcontents              % 生成目录
-\clearpage                   % 目录后另起一页，避免正文接在目录后面
+\maketitle
+\clearpage
 
-\section{源代码结构}          % 一级标题 
-\section{标题、作者、日期}  % 一级标题
+\tableofcontents
+\clearpage
+
+% ==================== 基础部分 ====================
+
+\section{源代码结构}
+LaTeX 源文件的扩展名是 \texttt{.tex}。最简单的文档类声明格式如下：
+
+\begin{center}
+  \texttt{\textbackslash documentclass[<options>]\{<classname>\}}
+\end{center}
+
+其中 \texttt{<classname>} 为文档类名称，常用文档类有
+\texttt{article}、\texttt{report}、\texttt{book}、\texttt{proc}、
+\texttt{slides}、\texttt{minimal}，以及支持中文排版的
+\texttt{ctexart}、\texttt{ctexrep}、\texttt{ctexbook} 等。
+
+\begin{table}[htbp]
+  \centering
+  \caption{LaTeX 常用文档类一览}
+  \begin{tabularx}{\textwidth}{@{}l l X@{}}
+    \toprule
+    文档类 & 中文含义 & 用途与主要特点 \\
+    \midrule
+    article & 文章 & 用于短文、论文、报告；无 \texttt{\textbackslash chapter}，章节命令为 \texttt{\textbackslash section}、\texttt{\textbackslash subsection} 等。 \\
+    report & 报告 & 用于较长报告、学位论文；有 \texttt{\textbackslash chapter}，可含摘要、附录等。 \\
+    book & 书 & 用于书籍排版；有 \texttt{\textbackslash part}、\texttt{\textbackslash chapter}；通常双面排版。 \\
+    proc & 会议论文集 & 用于会议论文；基于 article，提供会议论文常用格式。 \\
+    slides & 幻灯片 & 用于制作投影幻灯片；较老旧，现代推荐用 beamer。 \\
+    minimal & 最小文档 & 仅用于最小测试；几乎不提供标题、章节等排版功能。 \\
+    ctexart & 中文文章 & 支持中文的 article；自动处理中文字体、标点、断行等。 \\
+    ctexrep & 中文报告 & 支持中文的 report。 \\
+    ctexbook & 中文书籍 & 支持中文的 book。 \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\section{标题、作者、日期}
+用 \verb|\title|、\verb|\author|、\verb|\date| 设置标题信息，
+再用 \verb|\maketitle| 生成标题页。作者和日期留空则不显示。
+
 \section{换行、分段、空格}
+空行表示分段，多个连续空格只算一个，回车不等于换行，强制换行用 \verb|\\|。
+
 \section{居中、取消缩进、行距}
+居中用 \verb|center| 环境，取消缩进用 \verb|\noindent|，
+调整行距可用 \verb|\linespread| 或 \verb|setspace| 宏包。
+
 \section{字号与字体}
+字号命令有 \verb|\tiny|、\verb|\small|、\verb|\large|、\verb|\huge| 等；
+字体命令有 \verb|\textbf|、\verb|\textit|、\verb|\texttt| 等。
+
 \section{下划线与颜色}
+下划线用 \verb|\underline|，颜色需要 \verb|xcolor| 宏包，
+用 \verb|\textcolor| 设置前景色，\verb|\colorbox| 设置背景色。
+
 \section{纸张与边距}
+纸张在 \verb|\documentclass| 里设置，如 \verb|a4paper|；
+页边距用 \verb|geometry| 宏包，例如 \verb|\geometry{margin=2.5cm}|。
+
 \section{分页与分栏}
+分页用 \verb|\newpage| 或 \verb|\clearpage|；
+分栏需要 \verb|multicol| 宏包，用 \verb|multicols| 环境。
+
 \section{摘要摘录脚注边注}
+摘要用 \verb|abstract| 环境，引用块用 \verb|quote| 或 \verb|quotation|，
+脚注用 \verb|\footnote|，边注用 \verb|\marginpar|。
+
 \section{盒子}
+常用盒子命令有 \verb|\mbox|、\verb|\fbox|、\verb|\parbox|，
+更复杂排版可用 \verb|minipage| 环境。
+
 \section{自定义命令}
+用 \verb|\newcommand| 定义新命令，用 \verb|\renewcommand| 修改已有命令。
+
+% ==================== 图片部分 ====================
+
 \section{插入图片}
+需要 \verb|graphicx| 宏包，用 \verb|\includegraphics| 插入图片，
+可指定 \verb|width| 或 \verb|height| 控制大小。
+
 \section{浮动体与图片排版}
+图片通常放在 \verb|figure| 浮动体里，用 \verb|\caption| 加标题，
+\verb|[htbp]| 控制浮动位置。
+
 \section{图片引用}
+用 \verb|\label| 给图片加标签，用 \verb|\ref| 引用图片编号。
+
+% ==================== 列表部分 ====================
+
 \section{有序列表无序列表描述环境}
+无序列表用 \verb|itemize|，有序列表用 \verb|enumerate|，
+描述列表用 \verb|description|。
+
 \section{一些空格与填充}
+水平空格用 \verb|\quad|、\verb|\qquad|、\verb|\hspace|，
+垂直空格用 \verb|\vspace|，弹性填充用 \verb|\hfill|、\verb|\vfill|。
+
+% ==================== 表格部分 ====================
+
 \section{简单表格-tabular}
+用 \verb|tabular| 环境，\verb|&| 分列，\verb|\\| 换行，\verb|\hline| 画横线。
+
 \section{表格浮动环境与表格引用}
+表格通常放在 \verb|table| 浮动体里，用 \verb|\caption| 加标题，
+用 \verb|\label| 加标签，用 \verb|\ref| 引用。
+
 \section{一些表格样式}
+调整列宽用 \verb|p{}|、\verb|m{}|、\verb|b{}|，
+调整行高用 \verb|\arraystretch|。
+
 \section{三线表}
+用 \verb|booktabs| 宏包，\verb|\toprule|、\verb|\midrule|、\verb|\bottomrule| 绘制三线。
+
 \section{自动变宽表格-tabularx}
+用 \verb|tabularx| 宏包，\verb|X| 列会自动分配剩余宽度。
+
 \section{形式表格-tabularray}
+用 \verb|tabularray| 宏包的 \verb|tblr| 环境，语法更现代。
+
 \section{表格-换行与Q格式}
+\verb|tabularray| 支持在单元格内换行，用 \verb|Q| 格式控制列样式。
+
 \section{表格-变宽}
+\verb|tabularray| 用 \verb|X| 列自动变宽。
+
 \section{表格-行列设置分离}
+\verb|tabularray| 可以把行设置和列设置分开写，更清晰。
+
 \section{表格-框线样式颜色}
+\verb|tabularray| 支持自定义框线宽度、颜色、样式。
+
 \section{表格-按行列绘制边框线}
+可以只给某几行或某几列画边框线。
+
 \section{表格-多边框线}
+可以画双线、粗线、虚线等多种边框线。
+
 \section{表格-自由绘制边框线}
+可以按坐标自由绘制任意位置的边框线。
+
 \section{表格-设置行列样式}
+可以为整行或整列统一设置字体、颜色、对齐等样式。
+
 \section{表格-单元格合并于样式}
+用 \verb|\multicolumn|、\verb|\multirow| 合并单元格，
+\verb|tabularray| 也支持 \verb|cell| 命令合并和设置样式。
+
 \section{tabularray于三线表}
+\verb|tabularray| 可以很方便地画三线表。
+
 \section{长表格-longtblr}
+用 \verb|longtblr| 环境制作跨页长表格。
+
 \section{横向表格（宽表）}
+用 \verb|sidewaystable| 环境或 \verb|pdflscape| 宏包把宽表旋转。
+
 \section{关于表格的一些补充}
+补充说明表格的常见问题，如列宽、行高、跨页、对齐等。
+
+% ==================== 公式部分 ====================
+
 \section{数字模式与公式引用}
+行内公式用 \verb|$...$|，独立公式用 \verb|\[...\]| 或 \verb|equation| 环境，
+用 \verb|\label| 和 \verb|\ref| 引用公式编号。
+
 \section{分式与根式}
+分式用 \verb|\frac{a}{b}|，根式用 \verb|\sqrt{x}| 或 \verb|\sqrt[n]{x}|。
+
 \section{公式-上下标}
+上标用 \verb|^|，下标用 \verb|_|，同时上下标用 \verb|x_i^2|。
+
 \section{公式-上下线}
+上划线用 \verb|\overline|，下划线用 \verb|\underline|，
+上下括号用 \verb|\overbrace|、\verb|\underbrace|。
+
 \section{公式-求和与公式样式调整}
+求和用 \verb|\sum|，可加 \verb|\limits| 控制上下限位置，
+用 \verb|\displaystyle| 调整公式样式。
+
 \section{公式-积分}
+积分用 \verb|\int|，多重积分用 \verb|\iint|、\verb|\iiint|。
+
 \section{公式-矩阵}
+矩阵用 \verb|matrix|、\verb|pmatrix|、\verb|bmatrix| 等环境。
+
 \section{公式-多行公式}
+多行公式用 \verb|align| 或 \verb|gather| 环境，用 \verb|&| 对齐。
+
 \section{公式-分支公式}
-\section{公式-定理环境与clevere引用}
+分支公式用 \verb|cases| 环境。
+
+\section{公式-定理环境与cleveref引用}
+定理环境用 \verb|amsthm| 宏包，引用可用 \verb|cleveref| 宏包自动识别类型。
+
+% ==================== 文档结构部分 ====================
+
 \section{章节标题与目录}
+用 \verb|\section|、\verb|\subsection| 等命令生成标题和目录，
+用 \verb|\tableofcontents| 生成目录。
+
 \section{文档结构-前言正文附录后记}
+用 \verb|\frontmatter|、\verb|\mainmatter|、\verb|\backmatter| 划分文档结构，
+用 \verb|\appendix| 开始附录。
+
 \section{文档拆分}
+用 \verb|\include| 或 \verb|\input| 把大文档拆成多个文件。
+
 \section{页眉页脚}
+用 \verb|fancyhdr| 宏包自定义页眉页脚。
+
 \section{参考文献}
+用 \verb|thebibliography| 环境或 \verb|bibtex|、\verb|biblatex| 管理参考文献。
+
 \section{索引}
+用 \verb|makeidx| 或 \verb|imakeidx| 宏包生成索引。
+
+% ==================== TikZ 部分 ====================
+
 \section{TikZ-绘图 直线 坐标}
+用 \verb|tikz| 宏包，\verb|\draw (0,0) -- (2,1);| 画一条直线。
+
 \section{TikZ-基本图形绘制}
+可以画圆、矩形、椭圆、多边形等基本图形。
+
 \section{TikZ-线条样式}
+可以设置线条粗细、颜色、虚实、箭头等样式。
+
 \section{TikZ-scope环境、样式复用}
+用 \verb|scope| 环境分组，用 \verb|tikzset| 定义可复用样式。
+
 \section{TikZ-形变}
+用 \verb|scale|、\verb|rotate|、\verb|xshift|、\verb|yshift| 等做形变。
+
 \section{TikZ-绘制与填充}
+用 \verb|\draw| 绘制，用 \verb|\fill| 填充，用 \verb|filldraw| 同时绘制和填充。
+
 \section{TikZ-文字节点}
+用 \verb|\node| 添加文字节点，可设置位置、对齐、颜色等。
+
 \section{TikZ-循环绘制与坐标轴}
+用 \verb|\foreach| 循环绘制，用 \verb|axis| 环境画坐标轴。
+
 \section{TikZ-绘制函数图像}
+用 \verb|pgfplots| 宏包绘制函数图像。
+
+% ==================== 其他部分 ====================
+
 \section{初识beamer幻灯片}
+\verb|beamer| 是制作幻灯片的文档类，用 \verb|frame| 环境表示每一页。
+
 \section{CTeX补充内容}
+CTeX 提供中文排版支持，包括字体、标点、断行、章节标题中文化等。
+
 \section{一些目录样式}
+可以用 \verb|titletoc|、\verb|tocloft| 等宏包自定义目录样式。
+
 \section{为页面设置背景图片}
+用 \verb|background| 或 \verb|eso-pic| 宏包给页面加背景图片。
+
 \section{cutwin文字环绕排版}
+用 \verb|cutwin| 宏包实现文字环绕图片的排版效果。
+
 \end{document}
