@@ -171,7 +171,7 @@ LaTeX 源文件的扩展名是 \texttt{.tex}。最简单的文档类声明格式
 
 
 \section{换行、分段、空格}
-在LaTex中空格不等于换行。比如
+在LaTex中空格不等于换行。比如：
 
 include<stdio.h>
 
@@ -199,8 +199,29 @@ printf("Hello World!");
 
 
 \section{居中、取消缩进、行距}
-居中用 \verb|center| 环境，取消缩进用 \verb|\noindent|，
-调整行距可用 \verb|\linespread| 或 \verb|setspace| 宏包。
+使用
+
+\texttt{\textbackslash begin\{center\}}
+
+\texttt{\textbackslash end\{center\}}
+
+设置居中环境，这个环境中的所有行都是居中显示的。
+
+同理，也可以设置flushright、flushleft居右和具左环境。
+
+\texttt{\textbackslash noindent} 是取消缩进命令，哪个位置要取消缩进就写在哪个位置；
+在导言区写入\texttt{\textbackslash parindent = 0pt}通过设置缩进为0，同样能够做到取消缩进；
+\texttt{\textbackslash parindent = 0pt}还可以写成\texttt{\textbackslash setlength\{parindent\}\{0pt\}}，它们具有同样效果。
+
+在导言区通过\texttt{\textbackslash linespread\{行距倍数\}}命令能够设置全篇的行距倍数；在正文区使用\texttt{\textbackslash linespread\{行距倍数\}}\texttt{\textbackslash selestfont}会修改以这个命令为起始，它之后所有正文的行距；
+如果用大括号将\texttt{\textbackslash linespread\{行距倍数\}}\texttt{\textbackslash selestfont}和正文一起括起来并分段，即\{\texttt{\textbackslash linespread\{行距倍数\}}\texttt{\textbackslash selestfont}正文\textbackslash par\}，就可以控制大括号内的正文部分行距；
+在导言区使用\texttt{\textbackslash setstretch\{行距倍数\}}也同样可以设置全局行距；
+还可以使用在导言区通过\texttt{\textbackslash udepackage\{setspace\}}导入宏包，这个宏包里定义了\texttt{\textbackslash singlespacing}、\texttt{\textbackslash onehalfspacing}和\texttt{\textbackslash doublespacing}单倍行距、1.5倍行距和双倍行距命令，这个行距与其他行距不同，指的是字号而不是基础行距。
+通过设置\texttt{\textbackslash begin\{spacing\}\{行距倍数\}}和\texttt{\textbackslash end\{spacing\}}，即spacing环境，也能够修改环境内的行距。
+
+不同的软件中，行距的定义可能不同。在world和LaTex两个排版工具中，行距倍数指的是基础行距的倍数。
+在LaTex中，基础行距的定义是字号的1.2倍，在word中是字号的1.3倍。
+
 
 \section{字号与字体}
 字号命令有 \verb|\tiny|、\verb|\small|、\verb|\large|、\verb|\huge| 等；
