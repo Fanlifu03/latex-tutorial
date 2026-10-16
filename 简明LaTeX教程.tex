@@ -3,22 +3,37 @@
 % 再编译一次：xelatex 简明LaTeX教程.tex
 % 目的：第一次生成目录信息，第二次目录页码和条目才正确
 
-\documentclass[12pt,a4paper]{ctexart}  % 中文 article 文档类
+\documentclass[12pt,a4paper]{ctexart}
 
+% ===== 颜色与链接 =====
 \usepackage{xcolor}
 \usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue, citecolor=blue]{hyperref}
-\usepackage{booktabs}   % 三线表
-\usepackage{tabularx}   % 自动变宽表格
-\usepackage{geometry}   % 页边距
+% 或者无边框：
+% \usepackage[hidelinks]{hyperref}
+
+% ===== 表格 =====
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{tabularx}
+
+% ===== 数学 =====
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% ===== 图片 =====
+\usepackage{graphicx}
+
+% ===== 页面 =====
+\usepackage{geometry}
 \geometry{margin=2.5cm}
 
-% 不想显示颜色边框，可以用下面任一种替代 hyperref 的加载方式：
-% \usepackage[hidelinks]{hyperref}                       % 无边框
-% \usepackage[linkbordercolor={1 1 1}]{hyperref}          % 边框为白色
+% ===== 编号设置 =====
+\setcounter{tocdepth}{1}
+\setcounter{secnumdepth}{1}
+\counterwithin{table}{section}   % 表 1.1
+% \counterwithin{figure}{section} % 图 1.1，需要时取消注释
 
-\setcounter{tocdepth}{1}      % 目录显示深度：1 表示显示到 section
-\setcounter{secnumdepth}{1}   % 标题编号深度：1 表示 section 编号
-
+% ===== 文档信息 =====
 \title{简明LaTeX教程}
 \author{}
 \date{}
@@ -38,6 +53,26 @@
 % ==================== 基础部分 ====================
 
 \section{源代码结构}
+一个简单的LaTex程序主要包括导言区和正文区，导言区主要设置文档类和导入宏，正文区是主要的写作区域。一个具体的LaTex程序如下：
+
+\texttt{\textbackslash documentclass\{cetxart\}}\texttt{\% 文档类}
+
+\texttt{\textbackslash usepackage\{ctex\}}\texttt{\% 宏包}
+
+\texttt{\textbackslash begin\{document\}}
+
+\texttt{\% 正文区}
+
+Hello World!
+
+\texttt{\textbackslash end\{document\}}
+
+将它们编译运行后的结果是：
+
+Hello World!
+
+下面将讲解这段程序。
+
 LaTeX 源文件的扩展名是 \texttt{.tex}。最简单的文档类声明格式如下：
 
 \begin{center}
@@ -47,11 +82,12 @@ LaTeX 源文件的扩展名是 \texttt{.tex}。最简单的文档类声明格式
 其中 \texttt{<classname>} 为文档类名称，常用文档类有
 \texttt{article}、\texttt{report}、\texttt{book}、\texttt{proc}、
 \texttt{slides}、\texttt{minimal}，以及支持中文排版的
-\texttt{ctexart}、\texttt{ctexrep}、\texttt{ctexbook} 等。
+\texttt{ctexart}、\texttt{ctexrep}、\texttt{ctexbook} 等，如表~\ref{tab:classname}
 
 \begin{table}[htbp]
   \centering
   \caption{LaTeX 常用文档类一览}
+  \label{tab:classname}
   \begin{tabularx}{\textwidth}{@{}l l X@{}}
     \toprule
     文档类 & 中文含义 & 用途与主要特点 \\
@@ -69,9 +105,70 @@ LaTeX 源文件的扩展名是 \texttt{.tex}。最简单的文档类声明格式
   \end{tabularx}
 \end{table}
 
+文档类下边需要有：
+
+ \texttt{\textbackslash begin\{document\}}
+
+ \texttt{\% 正文区}
+ 
+  Hello World!
+
+ \texttt{\textbackslash end\{document\}}
+
+  在\texttt{\textbackslash begin\{document\}}和 \texttt{\textbackslash end\{document\}}之间的区域就是正文区，我们写的文字所有内容都需要放在正文区内。
+  \texttt{\% 文档类}{\% 正文区}是注释，在LaTex的源文件中\texttt{\%}后的东西是注释，注释是对文档的解释说明，编译器自动忽略，不会编译到文件当中。
+
+  在LaTex中我们无法直接输入\texttt{\textbackslash 、 \% 、 \{ 、 \} 等内容}，需要使用转义字符来表示，这里将常见的转义字符总结为表~\ref{tab:escape-chars}。
+
+  \begin{table}[htbp]
+  \centering
+  \caption{LaTeX 常见转义字符}
+  \label{tab:escape-chars}
+  \begin{tabularx}{\textwidth}{@{}c c X@{}}
+    \toprule
+    字符 & LaTeX 输入 & 说明 \\
+    \midrule
+     \texttt{\textbackslash} & \texttt{\textbackslash textbackslash} & 命令开始符，文本中需用 \texttt{\textbackslash textbackslash} 输出。 \\
+     \texttt{\%} & \texttt{\textbackslash \%} & 注释符，需转义。 \\
+     \texttt{\{} & \texttt{\textbackslash \{} & 分组开始，需转义。 \\
+     \texttt{\}} & \texttt{\textbackslash \}} & 分组结束，需转义。 \\
+     \texttt{\$} & \texttt{\textbackslash \$} & 数学模式开关，需转义。 \\
+     \texttt{\&} & \texttt{\textbackslash \&} & 表格列分隔符，需转义。 \\
+     \texttt{\#} & \texttt{\textbackslash \#} & 宏参数序号，需转义。 \\
+     \texttt{\_} & \texttt{\textbackslash \_} & 下标命令，需转义。 \\
+     \texttt{\textasciicircum} & \texttt{\textbackslash textasciicircum} & 上标命令，文本中需用 \texttt{\textbackslash textasciicircum}。 \\
+     \texttt{\textasciitilde} & \texttt{\textbackslash textasciitilde} & 非断行空格，文本中需用 \texttt{\textbackslash textasciitilde}。 \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+以\texttt{\textbackslash begin}为开头，以 \texttt{\textbackslash end} 为结尾的区域叫作环境，在这个区域之前的区域为导言区。
+
+  所有 \texttt{\textbackslash} 后带单词的部分称为命令，常见的命令有
+  \texttt{\textbackslash begin}、\texttt{\textbackslash end}、
+  \texttt{\textbackslash document}、\texttt{\textbackslash usepackage}、
+  \texttt{\textbackslash clearpage} 等。
+  其中\texttt{\textbackslash usepackage}的作用是引用宏，当文章需要使用中文，但不能使用支持中文的文档类时，可以使用
+  \texttt{\textbackslash usepackage(ctex)}来导入中文宏，这样就可以使用中文写作了。
+
+
+\clearpage
+
 \section{标题、作者、日期}
-用 \verb|\title|、\verb|\author|、\verb|\date| 设置标题信息，
-再用 \verb|\maketitle| 生成标题页。作者和日期留空则不显示。
+这一节介绍如何给文章添加标题、作者、日期。
+
+通常，可以在导言区完成文章标题、作者、日期的设置，具体方式为：
+
+使用\texttt{\textbackslash title \{标题\}}命令为文章添加标题。大括号中写入文章的标题。
+
+\texttt{\textbackslash author \{作者\}}命令同理，用于为文章添加作者。作者可以通过\texttt{\textbackslash and}命令添加多个作者，在作者后添加\texttt{\textbackslash thanks}命令会为作者添加附加信息。
+
+有时文章需要添加写作的日期，使用\texttt{\textbackslash date\{日期\}}命令可以完成这个操作。如果日期填入\texttt{\textbackslash today}这个命令，程序会显示编译文档的日期。
+
+这些设置是在导言区完成的，直接编译不会在pdf中显示出来，需要在正文区中写入\texttt{\textbackslash maketitle}命令，这样程序就可以显示这些设置了，\texttt{\textbackslash maketitle}的位置就是这些设置显示的位置。
+
+标题、作者、日期这些基础样式在文档类中已经设置好了，不同文档类的排版是不一样的。
+
 
 \section{换行、分段、空格}
 空行表示分段，多个连续空格只算一个，回车不等于换行，强制换行用 \verb|\\|。
