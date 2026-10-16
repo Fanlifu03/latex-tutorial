@@ -151,9 +151,6 @@ LaTeX 源文件的扩展名是 \texttt{.tex}。最简单的文档类声明格式
   其中\texttt{\textbackslash usepackage}的作用是引用宏，当文章需要使用中文，但不能使用支持中文的文档类时，可以使用
   \texttt{\textbackslash usepackage(ctex)}来导入中文宏，这样就可以使用中文写作了。
 
-
-\clearpage
-
 \section{标题、作者、日期}
 这一节介绍如何给文章添加标题、作者、日期。
 
@@ -197,6 +194,9 @@ printf("Hello World!");
 
 \texttt{\textbackslash hspace\{n em(pt/cm/in/ex)\}}\allowbreak 命令用于打空格，大括号内表示打出n个字符(磅/厘米/英寸/字符x) 大小的空格。
 
+\texttt{\textbackslash baselineskip} 表示当前字号下的一行高度，所以 \texttt{\textbackslash vspace*\{baselineskip\}} 就是空出一行。
+\texttt{\textbackslash vspace*} 带星号，表示即使处在段落开头也强制插入空白。
+
 
 \section{居中、取消缩进、行距}
 使用
@@ -209,18 +209,25 @@ printf("Hello World!");
 
 同理，也可以设置flushright、flushleft居右和具左环境。
 
+\vspace*{\baselineskip}
+
 \texttt{\textbackslash noindent} 是取消缩进命令，哪个位置要取消缩进就写在哪个位置；
 在导言区写入\texttt{\textbackslash parindent = 0pt}通过设置缩进为0，同样能够做到取消缩进；
 \texttt{\textbackslash parindent = 0pt}还可以写成\texttt{\textbackslash setlength\{parindent\}\{0pt\}}，它们具有同样效果。
 
+\vspace*{\baselineskip}
+
 在导言区通过\texttt{\textbackslash linespread\{行距倍数\}}命令能够设置全篇的行距倍数；在正文区使用\texttt{\textbackslash linespread\{行距倍数\}}\texttt{\textbackslash selestfont}会修改以这个命令为起始，它之后所有正文的行距；
-如果用大括号将\texttt{\textbackslash linespread\{行距倍数\}}\texttt{\textbackslash selestfont}和正文一起括起来并分段，即\{\texttt{\textbackslash linespread\{行距倍数\}}\texttt{\textbackslash selestfont}正文\textbackslash par\}，就可以控制大括号内的正文部分行距；
-在导言区使用\texttt{\textbackslash setstretch\{行距倍数\}}也同样可以设置全局行距；
-还可以使用在导言区通过\texttt{\textbackslash udepackage\{setspace\}}导入宏包，这个宏包里定义了\texttt{\textbackslash singlespacing}、\texttt{\textbackslash onehalfspacing}和\texttt{\textbackslash doublespacing}单倍行距、1.5倍行距和双倍行距命令，这个行距与其他行距不同，指的是字号而不是基础行距。
+如果用大括号将\texttt{\textbackslash linespread\{行距倍数\}}\texttt{\textbackslash selestfont}和正文一起括起来并分段，即\{\texttt{\textbackslash linespread\{行距倍数\}}\texttt{\textbackslash selestfont}正文\textbackslash par\}，就可以控制大括号内的正文部分行距。
+
+在导言区使用\texttt{\textbackslash setstretch\{行距倍数\}}也同样可以设置全局行距。
+
+还可以在导言区使用命令\texttt{\textbackslash udepackage\{setspace\}}导入宏包，这个宏包里定义了\texttt{\textbackslash singlespacing}、\texttt{\textbackslash onehalfspacing}和\texttt{\textbackslash doublespacing}单倍行距、1.5倍行距和双倍行距命令，这个行距与其他行距不同，指的是字号而不是基础行距。
+
 通过设置\texttt{\textbackslash begin\{spacing\}\{行距倍数\}}和\texttt{\textbackslash end\{spacing\}}，即spacing环境，也能够修改环境内的行距。
 
 不同的软件中，行距的定义可能不同。在world和LaTex两个排版工具中，行距倍数指的是基础行距的倍数。
-在LaTex中，基础行距的定义是字号的1.2倍，在word中是字号的1.3倍。
+在LaTex中，基础行距的定义是字号的1.2倍，在word中是字号的1.3倍需要注意转化。
 
 
 \section{字号与字体}
