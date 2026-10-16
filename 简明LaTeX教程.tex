@@ -171,7 +171,32 @@ LaTeX 源文件的扩展名是 \texttt{.tex}。最简单的文档类声明格式
 
 
 \section{换行、分段、空格}
-空行表示分段，多个连续空格只算一个，回车不等于换行，强制换行用 \verb|\\|。
+在LaTex中空格不等于换行。比如
+
+include<stdio.h>
+
+int main(void)
+
+\{
+
+\texttt{  printf("Hello World!");}
+
+\}
+
+实际编译后为：
+
+include<stdio.h>
+int main(void)
+{
+printf("Hello World!");
+}
+
+在LaTex中我们可以使用\texttt{\textbackslash \textbackslash}、\texttt{\textbackslash newline}来表示换行，换行后首行不会缩进。
+
+直接空一行或多行是用来表示另起一段的常用方式，也可以使用\texttt{\textbackslash par}来表示另起一段，分段首行会进行缩进。
+
+\texttt{\textbackslash hspace\{n em(pt/cm/in/ex)\}}\allowbreak 命令用于打空格，大括号内表示打出n个字符(磅/厘米/英寸/字符x) 大小的空格。
+
 
 \section{居中、取消缩进、行距}
 居中用 \verb|center| 环境，取消缩进用 \verb|\noindent|，
