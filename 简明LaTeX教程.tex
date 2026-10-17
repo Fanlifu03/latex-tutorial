@@ -15,6 +15,7 @@
 \usepackage{array}
 \usepackage{booktabs}
 \usepackage{tabularx}
+\usepackage{multirow}
 
 % ===== 数学 =====
 \usepackage{amsmath}
@@ -110,7 +111,7 @@ LaTeX 源文件的扩展名是 \texttt{.tex}。最简单的文档类声明格式
  \texttt{\textbackslash begin\{document\}}
 
  \texttt{\% 正文区}
- 
+
   Hello World!
 
  \texttt{\textbackslash end\{document\}}
@@ -231,8 +232,71 @@ printf("Hello World!");
 
 
 \section{字号与字体}
-字号命令有 \verb|\tiny|、\verb|\small|、\verb|\large|、\verb|\huge| 等；
-字体命令有 \verb|\textbf|、\verb|\textit|、\verb|\texttt| 等。
+当没有任何排版设置时，中文排版的字号大小是11磅，这个字号被称为正文字号，就是文章主体字号的大小。
+
+在导入文档类添加\texttt{\textbackslash documentclass[10/11/12pt]\{文档类\}}，可以设置整个文章主题的字号的大小。
+
+通过字号命令可以修改自字号以下环境/花括号括中的正文字号；字号命令是相对命令，实际大小取决于文档类的正文字号。
+表~\ref{tab:font-size-pt} 给出常用字号命令在 10pt、11pt、12pt 文档中的实际磅值。
+
+\begin{table}[htbp]
+  \centering
+  \caption{不同正文字号下字号命令的实际磅值}
+  \label{tab:font-size-pt}
+  \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}l l c c c@{}}
+    \toprule
+    \multirow{2}{*}{样本} & \multirow{2}{*}{命令}
+      & \multicolumn{3}{c}{正文字号} \\
+    \cmidrule(lr){3-5}
+      & & 10pt & 11pt & 12pt \\
+    \midrule
+    {\tiny sample}         & \texttt{\textbackslash tiny}         & 5pt  & 6pt  & 6pt  \\
+    {\scriptsize sample}   & \texttt{\textbackslash scriptsize}   & 7pt  & 8pt  & 8pt  \\
+    {\footnotesize sample} & \texttt{\textbackslash footnotesize} & 8pt  & 9pt  & 10pt \\
+    {\small sample}        & \texttt{\textbackslash small}        & 9pt  & 10pt & 11pt \\
+    {\normalsize sample}   & \texttt{\textbackslash normalsize}   & 10pt & 11pt & 12pt \\
+    {\large sample}        & \texttt{\textbackslash large}        & 12pt & 12pt & 14pt \\
+    {\Large sample}        & \texttt{\textbackslash Large}        & 14pt & 14pt & 17pt \\
+    {\LARGE sample}        & \texttt{\textbackslash LARGE}        & 17pt & 17pt & 20pt \\
+    {\huge sample}         & \texttt{\textbackslash huge}         & 20pt & 20pt & 25pt \\
+    {\Huge sample}         & \texttt{\textbackslash Huge}         & 25pt & 25pt & 25pt \\
+    \bottomrule
+  \end{tabular*}
+\end{table}
+
+使用\texttt{\textbackslash fontsize\{字体大小(pt)\}\{基础行距(pt)\}}，同样能够修改环境或花括号中以它为起点，往后的正文字号。
+
+导入中文宏包（如 \texttt{ctex}）后，可用 \texttt{\textbackslash zihao\{\}} 命令按中文号数设置字号。
+小号字在号数前加负号，例如 \texttt{\textbackslash zihao\{-4\}} 是小四。
+各号数与 bp、pt 的对应关系见表~\ref{tab:zihao}。
+
+\begin{table}[htbp]
+  \centering
+  \caption{\texttt{\textbackslash zihao} 字号对照表}
+  \label{tab:zihao}
+  \begin{tabularx}{\textwidth}{@{}l l c c X@{}}
+    \toprule
+    字号 & \texttt{\textbackslash zihao} 参数 & 大小（bp） & 大小（pt） & 示例 \\
+    \midrule
+    初号   & \texttt{\{0\}}   & 42 bp   & 42.1575 pt & {\zihao{0} 字号} \\
+    小初   & \texttt{\{-0\}}  & 36 bp   & 36.1350 pt & {\zihao{-0} 字号} \\
+    一号   & \texttt{\{1\}}   & 26 bp   & 26.0975 pt & {\zihao{1} 字号} \\
+    小一   & \texttt{\{-1\}}  & 24 bp   & 24.0900 pt & {\zihao{-1} 字号} \\
+    二号   & \texttt{\{2\}}   & 22 bp   & 22.0825 pt & {\zihao{2} 字号} \\
+    小二   & \texttt{\{-2\}}  & 18 bp   & 18.0675 pt & {\zihao{-2} 字号} \\
+    三号   & \texttt{\{3\}}   & 16 bp   & 16.0600 pt & {\zihao{3} 字号} \\
+    小三   & \texttt{\{-3\}}  & 15 bp   & 15.0563 pt & {\zihao{-3} 字号} \\
+    四号   & \texttt{\{4\}}   & 14 bp   & 14.0525 pt & {\zihao{4} 字号} \\
+    小四   & \texttt{\{-4\}}  & 12 bp   & 12.0450 pt & {\zihao{-4} 字号} \\
+    五号   & \texttt{\{5\}}   & 10.5 bp & 10.5394 pt & {\zihao{5} 字号} \\
+    小五   & \texttt{\{-5\}}  & 9 bp    & 9.0338 pt  & {\zihao{-5} 字号} \\
+    六号   & \texttt{\{6\}}   & 7.5 bp  & 7.5281 pt  & {\zihao{6} 字号} \\
+    小六   & \texttt{\{-6\}}  & 6.5 bp  & 6.5244 pt  & {\zihao{-6} 字号} \\
+    七号   & \texttt{\{7\}}   & 5.5 bp  & 5.5206 pt  & {\zihao{7} 字号} \\
+    八号   & \texttt{\{8\}}   & 5 bp    & 5.0188 pt  & {\zihao{8} 字号} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
 
 \section{下划线与颜色}
 下划线用 \verb|\underline|，颜色需要 \verb|xcolor| 宏包，
