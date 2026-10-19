@@ -17,6 +17,10 @@
 \usepackage{tabularx}
 \usepackage{multirow}
 
+% ===== 下划线 =====
+\usepackage{ulem}
+\usepackage{xeCJKfntef}
+
 % ===== 数学 =====
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -195,7 +199,7 @@ printf("Hello World!");
 
 \texttt{\textbackslash hspace\{n em(pt/cm/in/ex)\}}\allowbreak 命令用于打空格，大括号内表示打出n个字符(磅/厘米/英寸/字符x) 大小的空格。
 
-\texttt{\textbackslash baselineskip} 表示当前字号下的一行高度，所以 \texttt{\textbackslash vspace*\{baselineskip\}} 就是空出一行。
+\texttt{\textbackslash baselineskip} 表示当前字号下的一行高度，所以 \texttt{\textbackslash vspace*\{\textbackslash baselineskip\}} 就是空出一行。
 \texttt{\textbackslash vspace*} 带星号，表示即使处在段落开头也强制插入空白。
 
 
@@ -298,21 +302,126 @@ printf("Hello World!");
   \end{tabularx}
 \end{table}
 
+\vspace*{\baselineskip}
+
+使用\texttt{\textbackslash heiti}能够修改环境中的字体为{\heiti 黑体}，还有
+\texttt{\textbackslash songti}、\texttt{\textbackslash yahei}、\texttt{\textbackslash fangsong}、\texttt{\textbackslash kaishu}、\texttt{\textbackslash lishu}、\texttt{\textbackslash youyuan}等，分别表示{\songti 宋体}，{\yahei 雅黑}，{\fangsong 仿宋}，{\kaishu 楷书}，{\lishu 隶书}，{\youyuan 幼圆}字体。
+
+在英文字体中，常用的操作有\texttt{\textbackslash bfseriers}加粗，和\texttt{\textbackslash itshape}斜体，
+英文常用字体为罗马字体用命令\texttt{\textbackslash rmfamily}设置。还有一些字体如表~\ref{tab:ziti}所示。
+
+\begin{table}[htbp]
+  \centering
+  \caption{字体命令一览}
+  \label{tab:ziti}
+  \begin{tabularx}{\textwidth}{@{}l l l l X@{}}
+    \toprule
+    类别 & 声明命令 & 带参数命令 & 英文名 & 说明 \\
+    \midrule
+    \multicolumn{5}{@{}l}{\textbf{字体族}} \\
+    & \texttt{\textbackslash rmfamily} & \texttt{\textbackslash textrm\{...\}} & \textrm{roman} & 衬线字体（罗马体） \\
+    & \texttt{\textbackslash sffamily} & \texttt{\textbackslash textsf\{...\}} & \textsf{sans serif} & 无衬线字体 \\
+    & \texttt{\textbackslash ttfamily} & \texttt{\textbackslash texttt\{...\}} & \texttt{typewriter} & 等宽字体 \\
+    \midrule
+    \multicolumn{5}{@{}l}{\textbf{字体系列}} \\
+    & \texttt{\textbackslash mdseries} & \texttt{\textbackslash textmd\{...\}} & \textmd{medium} & 正常粗细（中等） \\
+    & \texttt{\textbackslash bfseries} & \texttt{\textbackslash textbf\{...\}} & \textbf{boldface} & 粗体 \\
+    \midrule
+    \multicolumn{5}{@{}l}{\textbf{字体形状}} \\
+    & \texttt{\textbackslash upshape} & \texttt{\textbackslash textup\{...\}} & \textup{upright} & 直立（默认） \\
+    & \texttt{\textbackslash itshape} & \texttt{\textbackslash textit\{...\}} & \textit{italic} & 斜体 \\
+    & \texttt{\textbackslash slshape} & \texttt{\textbackslash textsl\{...\}} & \textsl{slanted} & 伪斜体（倾斜但不改变字形） \\
+    & \texttt{\textbackslash scshape} & \texttt{\textbackslash textsc\{...\}} & \textsc{small caps} & 小型大写 \\
+    \midrule
+    \multicolumn{5}{@{}l}{\textbf{强调与恢复}} \\
+    & \texttt{\textbackslash em} & \texttt{\textbackslash emph\{...\}} & \emph{emphasized} & 强调，在直立与斜体之间自动切换 \\
+    & \texttt{\textbackslash normalfont} & — & normal font & 恢复默认字体（族、系列、形状一起恢复） \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\texttt{fontspec} 字体宏包提供三个命令：
+\texttt{\textbackslash setmainfont\{字体名\}}、
+\texttt{\textbackslash setsansfont\{字体名\}}、
+\texttt{\textbackslash setmonofont\{字体名\}}，
+分别用于设置主要字体、无衬线字体和等宽字体。
+也可以使用\texttt{\textbackslash fontspec\{字体类型\}}命令设置环境中的字体类型。
+
+想使用电脑上的中文字体，需要先知道电脑中装了哪些中文字体。
+在 Linux 或 macOS 的终端中，可以用 \texttt{fc-list} 命令查找：
+
+\begin{verbatim}
+fc-list -f "%{family}\n" : lang=zh
+\end{verbatim}
+
+这条命令会列出系统中所有中文（\texttt{lang=zh}）字体的家族名（\texttt{family}），
+每行一个。拿到字体名后，就可以在 \texttt{fontspec} 中用
+\texttt{\textbackslash setmainfont\{字体名\}} 等命令调用。
+可以使用\texttt{\textbackslash setCJKmainfont\{字体名\}}来设置主要字体。
+
 \section{下划线与颜色}
-下划线用 \verb|\underline|，颜色需要 \verb|xcolor| 宏包，
-用 \verb|\textcolor| 设置前景色，\verb|\colorbox| 设置背景色。
+使用下划线需要先加载 \texttt{ulem} 宏包，具体命令为
+\texttt{\textbackslash usepackage[normalem]\{ulem\}}。
+下划线命令为 \texttt{\textbackslash uline\{...\}}，
+大括号内写要加下划线的文字。
+\texttt{\textbackslash uline\{...\}} 是 \uline{单条下划线}，
+还有 \texttt{\textbackslash uuline\{...\}} \uuline{双下划线}、
+\texttt{\textbackslash uwave\{...\}} \uwave{波浪线}、
+\texttt{\textbackslash dotuline\{...\}} \dotuline{点下划线}，
+\texttt{\textbackslash sout\{...\}} 表示删除线，
+例如 \sout{这段文字被划掉了}，
+\texttt{\textbackslash xout\{...\}}，也表示删除，只不过使用斜线，
+例如 \xout{这段文字被划掉了}。加下划线一类命令时，大括号内的文字不会自动换行，
+需要进行手动换行。
+
+还有中文的下划线宏包 \texttt{xeCJKfntef}，它提供的命令为
+\verb|\CJKunderline{...}|（如 \CJKunderline{单条下划线}）、
+\verb|\CJKunderdblline{...}|（如 \CJKunderdblline{双下划线}）、
+\verb|\CJKunderwave{...}|（如 \CJKunderwave{波浪线}）、
+\verb|\CJKunderdot{...}|（如 \CJKunderdot{点下划线}）、
+\verb|\CJKsout{...}|（如 \CJKsout{这段文字被划掉了}）、
+\verb|\CJKxout{...}|（如 \CJKxout{这段文字被划掉了}）。
+注意：这些命令大括号内的文字不会自动换行，需要手动换行。
+
+\vspace*{\baselineskip}
+
+设置颜色也需要一个包xcolor。简单的颜色设置命令为\verb|\color{颜色名}|，可以设置环境中文字的颜色。\verb|\color{颜色名}|命令必须知道颜色的英语名，
+如果不知道颜色的名字可以使用rdb模式，命令为\verb|\color[rgb]{r,g,b}|，花括号中是rgb参数。
+
+\texttt{xcolor} 提供 \verb|\textcolor{颜色}{内容}|\allowbreak 设置文字颜色。
+
+也可以用 \verb|\textcolor[rgb]{r,g,b}{内容}|\allowbreak 指定 RGB 颜色。
+
+\verb|\colorbox{颜色}{内容}| 设置背景色，
+\verb|\colorbox[rgb]{r,g,b}{内容}| 用 RGB 指定背景色。
+
+\verb|\fcolorbox{边框色}{背景色}{内容}| 同时设置边框和背景色，
+但边框色和背景色需要用 \verb|\definecolor| 先定义。
 
 \section{纸张与边距}
-纸张在 \verb|\documentclass| 里设置，如 \verb|a4paper|；
-页边距用 \verb|geometry| 宏包，例如 \verb|\geometry{margin=2.5cm}|。
+每一个文档类中都会包含一些纸张的基础信息，比如页边距和一些简单的字号信息。
+要修改这些信息需要导入geometry宏包，具体命令为
+\begin{center}
+  \texttt{\textbackslash usepackage[landscape]\{geometry\}}
+\end{center}
+有landscape时纸张为横板，没有时为竖版。这个宏中有命令\texttt{\textbackslash geometry\{纸张大小，页边距\}}，花括号中的参数
+有a4/a3paper等，用于设置纸张大小，不写默认a4；页边距有四个，为left= cm,right= cm,top= cm,bottom= cm，还可以合到一起：hmargin= cm,vmargin= cm设置水平和垂直边距；还可以margin= cm，所有边距相同。
+
 
 \section{分页与分栏}
-分页用 \verb|\newpage| 或 \verb|\clearpage|；
-分栏需要 \verb|multicol| 宏包，用 \verb|multicols| 环境。
+单栏分页可以用 \verb|\newpage| 或 \verb|\clearpage|二者效果相同。在双栏中，\verb|\newpage|会跳入下一栏，
+\verb|\clearpage|会跳入下一页。
+
+分栏需要 \verb|multicol| 宏包，用 \verb|multicols| 环境；还可以在声明文档类时，在<options>中填入twocolumn，可以完成全文二分栏；
+使用\verb|onecolumn|,\verb|twocolumn|命令到正文中，会新开一页，使用单栏或双栏。
 
 \section{摘要摘录脚注边注}
-摘要用 \verb|abstract| 环境，引用块用 \verb|quote| 或 \verb|quotation|，
-脚注用 \verb|\footnote|，边注用 \verb|\marginpar|。
+摘要用 \verb|abstract| 环境，关键词使用\verb|\noindent{\text\{关键词：\}； ； ；}|
+
+引用块用 \verb|quote|、\verb|quotation|或\verb|verse|环境。相比\verb|quote|，\verb|quotation|环境中段落首行会缩进，\verb|verse|环境中文字首行定格，其他行缩进两格。
+还有一种代码环境\verb|verbatim|，这个环境用于排版代码。
+
+脚注用 \verb|\footnote|，要修改脚注编号可以使用\verb|\setcounter{footnote}{0}|来归零角标编号。边注用 \verb|\marginpar|。
 
 \section{盒子}
 常用盒子命令有 \verb|\mbox|、\verb|\fbox|、\verb|\parbox|，
