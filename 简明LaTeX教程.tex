@@ -424,47 +424,200 @@ fc-list -f "%{family}\n" : lang=zh
 脚注用 \verb|\footnote|，要修改脚注编号可以使用\verb|\setcounter{footnote}{0}|来归零角标编号。边注用 \verb|\marginpar|。
 
 \section{盒子}
-常用盒子命令有 \verb|\mbox|、\verb|\fbox|、\verb|\parbox|，
-更复杂排版可用 \verb|minipage| 环境。
+狭义box指独立于正文之外，对正文内容进行补充说明的部分，排版上还有广义的盒子。
+
+狭义盒子的命令是 \verb|\fbox{内容}|，
+它会生成一个框将内容框住，但内容不会自动换行。
+
+可以用 \verb|\setlength{\fboxrule}{length}|设置边框粗细。
+
+用 \verb|\setlength{\fboxsep}{length}|设置边框与内容之间的距离。
+
+\vspace*{\baselineskip}
+
+\verb|\framebox[width][position]{text}|也是box命令,position有l:left，c:center，r:right，s:两端对齐
+
+\vspace*{\baselineskip}
+
+\verb|\begin{minipage}[外对齐][高度][内对齐]{宽度}|是竖直排列box命令，外对齐有：t：顶部，m：中间，b：底部，内对齐参数与外对齐相同。
+
+\vspace*{\baselineskip}
+
+\verb|\rule[上下移动]{width}{height}|是一个黑色的方框。
+
+\vspace*{\baselineskip}
+
+命令\verb|rotatebox[origin=c]{角度}{内容}|能够旋转文字，需要宏包graphicx。
+
+\vspace*{\baselineskip}
+
+\verb|\rlap{text}|和\verb|\llap{text}|分别用于左右重叠。
 
 \section{自定义命令}
-用 \verb|\newcommand| 定义新命令，用 \verb|\renewcommand| 修改已有命令。
+用 \verb|\newcommand{命令}{功能}| 或\verb|\newcommand{命令}[参数数量]{功能}|定义新命令，用 \verb|\renewcommand{名称}{}| 修改已有命令。
 
 % ==================== 图片部分 ====================
 
 \section{插入图片}
-需要 \verb|graphicx| 宏包，用 \verb|\includegraphics| 插入图片，
-可指定 \verb|width| 或 \verb|height| 控制大小。
+需要 \verb|[draft（草稿）]graphicx| 宏包，用 \verb|\includegraphics[调整]{图片路径}| 插入图片，
+调整可指定 \verb|width|、 \verb|height|或 \verb|scale|控制图片大小，可以使用\verb|width=\linewidth|让图片大小等于行距。
+还有\verb|angle|调整图片角度
+
 
 \section{浮动体与图片排版}
-图片通常放在 \verb|figure| 浮动体里，用 \verb|\caption| 加标题，
-\verb|[htbp]| 控制浮动位置。
+图片通常放在 \verb|figure| （\verb|figure*|）浮动体环境里，
+\verb|[htbp！]| 控制浮动位置，h:here，t:top，b:bootom，p:page，！：忽略一些限制。
+使用\verb|caption{标题}|为图片添加标题，图片标题自动编号。
 
 \section{图片引用}
-用 \verb|\label| 给图片加标签，用 \verb|\ref| 引用图片编号。
+用 \verb|\label{标签内容（唯一）}| 给图片加标签，用 \verb|\ref{标签}| （编号）或\verb|\pageref{标签}|（页数）引用图片编号。
 
 % ==================== 列表部分 ====================
 
 \section{有序列表无序列表描述环境}
-无序列表用 \verb|itemize|，有序列表用 \verb|enumerate|，
-描述列表用 \verb|description|。
+无序列表用 \verb|itemize|环境，例如：
+
+\begin{verbatim}
+\begin{itemize}
+  \item[-] 吃饭
+  \item[*] 睡觉
+  \item[+] 打豆豆
+\end{itemize}
+\end{verbatim}
+编译结果为:
+\begin{itemize}
+  \item[-] 吃饭
+  \item[*] 睡觉
+  \item[+] 打豆豆
+\end{itemize}
+
+有序列表用 \verb|enumerate|环境，例如：
+\begin{verbatim}
+\begin{enumerate}
+  \item[-] 吃饭
+  \item[*] 睡觉
+  \item[+] 打豆豆
+\end{enumerate}
+\end{verbatim}
+编译结果为:
+\begin{enumerate}
+  \item 吃饭
+  \item 睡觉
+  \item 打豆豆
+\end{enumerate}
+
+描述列表用 \verb|description|环境，例如：
+\begin{verbatim}
+  \begin{description}
+    \item[吃饭] 进食
+  \end{description}
+\end{verbatim}
+编译结果为
+\begin{description}
+  \item[吃饭] 进食
+\end{description}
+
 
 \section{一些空格与填充}
-水平空格用 \verb|\quad|、\verb|\qquad|、\verb|\hspace|，
-垂直空格用 \verb|\vspace|，弹性填充用 \verb|\hfill|、\verb|\vfill|。
+水平空格用 \verb|\quad|（添加1em空格）、\verb|\qquad|（添加2em空格）、\verb|\hspace{距离}|，
+垂直空格用 \verb|\vspace|，弹性填充用 \verb|\hfill|（水平）、\verb|\vfill|（竖直）。还有\verb|\hrulefill|和\verb|\dotfill|为弹性线填充和弹性点填充。
+还有\verb|\stretch{}|写在\verb|\hspace{距离}|用于控制一行多个空缺的长度比例。
 
 % ==================== 表格部分 ====================
 
 \section{简单表格-tabular}
-用 \verb|tabular| 环境，\verb|&| 分列，\verb|\\| 换行，\verb|\hline| 画横线。
+用 \verb|tabular[外表格]{列格式}| 环境，\verb|&| 分列，\verb|\\| 换行，\verb|\hline| 画横线。
+例如
+\begin{center}
+  \begin{verbatim}
+    \begin{tabular}[]{|c|c|c|c|c|（|表示表格竖线）}
+      \hline（横线）
+      姓名&面试&理论知识&上机考试&考评结果\\
+      \hline
+      冯宝宝&85&90&85&合格\\
+      \hline
+      张楚岚&90&55&60&不合格\\
+      \hline
+      张灵玉&90&82&75&合格\\
+      \hline
+    \end{tabular}
+  \end{verbatim}
+\end{center}
+编译结果为：
+\begin{center}
+  \begin{tabular}[]{|c|c|c|c|c|}
+    \hline
+    姓名&面试&理论知识&上机考试&考评结果\\
+    \hline
+    冯宝宝&85&90&85&合格\\
+    \hline
+    张楚岚&90&55&60&不合格\\
+    \hline
+    张灵玉&90&82&75&合格\\
+    \hline
+  \end{tabular}
+\end{center}
+
+{列格式}有c l r表示居中，左、右对齐，还有p{宽度}用于限制单元格宽度。
+{|c|c|c|c|c|}可以用{*{5}{|c}|}（*{重复次数}{重复内容}）表示。
+
+{外对齐}有 t m b 分别表示 顶部、居中、底部对齐。
 
 \section{表格浮动环境与表格引用}
-表格通常放在 \verb|table| 浮动体里，用 \verb|\caption| 加标题，
+表格通常放在 \verb|table| 浮动体环境里，可以使用[htpb！]控制浮动位置，用 \verb|\caption| 加标题，
 用 \verb|\label| 加标签，用 \verb|\ref| 引用。
 
 \section{一些表格样式}
-调整列宽用 \verb|p{}|、\verb|m{}|、\verb|b{}|，
-调整行高用 \verb|\arraystretch|。
+除了\verb|hline|还有\verb|cline{a-b}|表示从第a个单元格画到第b个单元格。
+
+借助宏包diagbox,使用\verb|diagbox{text1}{text2}{text3}...{textn}|可以将一个单元格分为n个部分。
+
+借助宏包multirow，使用\verb|\multirow{合并数量}{合并后宽度}{合并后内容}|用于竖直方向上的表格合并。
+
+借助宏包multirow，使用\verb|\multirow{合并数量}{合并后格式}{合并后内容}|用于水平方向上的表格合并。
+修改上面的例子为：
+\begin{center}
+  \begin{verbatim}
+    \begin{table}
+      \centering
+      \caption{考评成绩}
+        \begin{tabular}[]{*{5}{|c}|}
+          \hline
+          \multirow{2}{*}{姓名}&\multicolumn{3}{c|}{考试内容}&\multirow
+          {2}{*}{考评结果}\\
+          \cline{2-4}
+              &面试&理论知识&上机考试&\\
+          \hline
+          冯宝宝&85&90&85&合格\\
+          \hline
+          张楚岚&90&55&60&不合格\\
+          \hline
+          张灵玉&90&82&75&合格\\
+          \hline
+      \end{tabular}
+      \label{tab:exam_data}
+    \end{table}
+  \end{verbatim}
+\end{center}
+通过\verb|\ref{tab:exam_data}|调用，编译后表格为~\ref{tab:exam_data}：
+\begin{table}
+  \centering
+  \caption{考评成绩}
+    \begin{tabular}[]{*{5}{|c}|}
+      \hline
+      \multirow{2}{*}{姓名}&\multicolumn{3}{c|}{考试内容}&\multirow{2}{*}{考评结果}\\
+      \cline{2-4}
+          &面试&理论知识&上机考试&\\
+      \hline
+      冯宝宝&85&90&85&合格\\
+      \hline
+      张楚岚&90&55&60&不合格\\
+      \hline
+      张灵玉&90&82&75&合格\\
+      \hline
+  \end{tabular}
+  \label{tab:exam_data}
+\end{table}
 
 \section{三线表}
 用 \verb|booktabs| 宏包，\verb|\toprule|、\verb|\midrule|、\verb|\bottomrule| 绘制三线。
