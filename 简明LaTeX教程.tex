@@ -16,6 +16,7 @@
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{multirow}
+\usepackage{tabularray}
 
 % ===== 下划线 =====
 \usepackage{ulem}
@@ -620,76 +621,208 @@ fc-list -f "%{family}\n" : lang=zh
 \end{table}
 
 \section{三线表}
-用 \verb|booktabs| 宏包，\verb|\toprule|、\verb|\midrule|、\verb|\bottomrule| 绘制三线。
+用 \verb|booktabs| 宏包，\verb|\toprule[粗细]|、\verb|\midrule[粗细]|、\verb|\bottomrule[粗细]| 绘制三线。
+
+还有\verb|\tcmidrule{x-y}|和
+
+\verb|\specialrule{line width}{above space}{below space}|绘制表格内横线。
 
 \section{自动变宽表格-tabularx}
-用 \verb|tabularx| 宏包，\verb|X| 列会自动分配剩余宽度。
+自动变宽表格需要使用 \verb|tabularx| 宏包，使用环境为\\
+\verb|tabularx{\linewidth}{c ... c ... x}|\verb|X| 列会自动分配剩余宽度。
+
+在c或x前添加命令\verb|\centering\arraybackslash|、\verb|\raggedleft\arraybackslash|\\
+和\verb|\raggedright\arraybackslash|分别表示表格中元素居中、靠右和靠左。
 
 \section{形式表格-tabularray}
 用 \verb|tabularray| 宏包的 \verb|tblr| 环境，语法更现代。
 
 \section{表格-换行与Q格式}
-\verb|tabularray| 支持在单元格内换行，用 \verb|Q| 格式控制列样式。
+\verb|tabularray| 支持在单元格内换行，使用\verb|\\|换行。
+
+用 \verb|Q[水平,垂直,宽度]| 格式控制列样式，水平有l c r ，垂直有h:head f:foot m
 
 \section{表格-变宽}
-\verb|tabularray| 用 \verb|X| 列自动变宽。
+\verb|tabularray| 用 \verb|X[l/c/r,比例系数]| 列自动变宽。\\
+对整体表宽，需要设置\verb|colspec={} , width = 0.8\linewidth|两个参数分别表示列设置和总表宽。
 
 \section{表格-行列设置分离}
-\verb|tabularray| 可以把行设置和列设置分开写，更清晰。
+\verb|tabularray| 可以通过\verb|colspec={}|进行行格式设置，也可以通过\verb|rowspec={}|进行列格式设置。
 
 \section{表格-框线样式颜色}
 \verb|tabularray| 支持自定义框线宽度、颜色、样式。
+在\verb|\begin{tblr}|后的\verb|{}|中添加\verb|hlines={大小，风格，颜色},vlines={}|就会为表格添加横线和竖线。
+风格有solid、dashed、ddotted等。
+
+自定义颜色要引入宏包xcolor。
 
 \section{表格-按行列绘制边框线}
-可以只给某几行或某几列画边框线。
+可以只给某几行或某几列画边框线。用hlines/vlines={划线范围}{边框线样式}设置边框线划线范围。
+画线范围可以用单个数字，多个数字或一个范围或“-”表示全部。
 
 \section{表格-多边框线}
 可以画双线、粗线、虚线等多种边框线。
+hlines/vlines={序号}{划线范围}{边框线样式}，序号表示边框线的数量序号。
 
 \section{表格-自由绘制边框线}
 可以按坐标自由绘制任意位置的边框线。
+画单条线使用hline/vline{划线范围} = {序号}{划线范围}{边框线样式}就可以控制任意范围的边框线。
 
 \section{表格-设置行列样式}
 可以为整行或整列统一设置字体、颜色、对齐等样式。
+设置所有列的样式为 columns = {对齐（c r l）,bg=背景色 , fg= 字体色 , font = 字体+大小}，
+rows可以设置所有行的样式。row{范围}={}设置多个行，同理column用于设置多个列。
 
 \section{表格-单元格合并于样式}
-用 \verb|\multicolumn|、\verb|\multirow| 合并单元格，
-\verb|tabularray| 也支持 \verb|cell| 命令合并和设置样式。
+cells={对齐（c r l）,bg=背景色 , fg= 字体色 , font = 字体+大小}设置所有单元格样式，
+cell{行范围}{列范围}={}表示对多个单元格设置。\\
+用cell{行范围}{列范围}={合并数}{单元格样式}，合并数用r = N , c = M，表示竖直和水平合并。
+上面的表格就可以改为：
+\begin{center}
+  \begin{verbatim}
+    \begin{table}[htbp]
+      \centering
+      \caption{考评成绩}
+      \begin{tblr}{
+        colspec = {X[c] X[c] X[c] X[c] X[c]},      % 空格分隔，不是逗号
+        width = 0.8\linewidth,
+        vlines,
+        hline{5} = {1}{5}{red},
+        hlines,
+        cell{1}{1} = {r=2}{},
+        cell{1}{5} = {r=2}{},
+        cell{1}{2} = {c=3}{},
+      }
+        姓名 & 考试内容 & 理论知识 & 上机考试 & 考评结果 \\
+        姓名 & 面试 & 理论知识 & 上机考试 & 考评结果 \\
+        冯宝宝 & 85 & 90 & 85 & 合格 \\
+        张楚岚 & 90 & 55 & 60 & 不合格 \\
+        张灵玉 & 90 & 82 & 75 & 合格 \\
+      \end{tblr}
+      \label{tab:exam_data_new}
+    \end{table}
+  \end{verbatim}
+\end{center}
 
-\section{tabularray于三线表}
+编译结果如表~\ref{tab:exam_data_new}所示。
+
+\begin{table}[htbp]
+  \centering
+  \caption{考评成绩}
+  \begin{tblr}{
+    colspec = {X[c] X[c] X[c] X[c] X[c]},      % 空格分隔，不是逗号
+    width = 0.8\linewidth,
+    vlines,
+    hline{5} = {1}{5}{red},
+    hlines,
+    cell{1}{1} = {r=2}{},
+    cell{1}{5} = {r=2}{},
+    cell{1}{2} = {c=3}{},
+  }
+    姓名 & 考试内容 & 理论知识 & 上机考试 & 考评结果 \\
+    姓名 & 面试 & 理论知识 & 上机考试 & 考评结果 \\
+    冯宝宝 & 85 & 90 & 85 & 合格 \\
+    张楚岚 & 90 & 55 & 60 & 不合格 \\
+    张灵玉 & 90 & 82 & 75 & 合格 \\
+  \end{tblr}
+  \label{tab:exam_data_new}
+\end{table}
+
+\section{tabularray与三线表}
 \verb|tabularray| 可以很方便地画三线表。
+使用\verb|\UseTblrLibrary{booktabs}|引入宏，再使用\verb|\toprule|、\verb|\midrule|和\verb|\bottomrule|绘制三线表。
 
 \section{长表格-longtblr}
-用 \verb|longtblr| 环境制作跨页长表格。
+用 \verb|longtblr[设置]{格式}| 环境制作跨页长表格。
+设置中有caption={},label={}。
 
 \section{横向表格（宽表）}
+引用rotating宏包，
 用 \verb|sidewaystable| 环境或 \verb|pdflscape| 宏包把宽表旋转。
 
-\section{关于表格的一些补充}
-补充说明表格的常见问题，如列宽、行高、跨页、对齐等。
+%\section{关于表格的一些补充}
+%补充说明表格的常见问题，如列宽、行高、跨页、对齐等。
 
 % ==================== 公式部分 ====================
 
 \section{数字模式与公式引用}
-行内公式用 \verb|$...$|，独立公式用 \verb|\[...\]| 或 \verb|equation| 环境，
-用 \verb|\label| 和 \verb|\ref| 引用公式编号。
+行内公式用 \verb|$...$|，独立公式用 \verb|\[...\]| 或 \verb|equation| 环境，\verb|equation| 环境会自动为公式编号。
+
+用 \verb|\label| 和 \verb|\ref| 引用公式编号。还可以引用宏包amsmath,使用命令\\
+\verb|\eqref{label}|引用公式编号。
 
 \section{分式与根式}
-分式用 \verb|\frac{a}{b}|，根式用 \verb|\sqrt{x}| 或 \verb|\sqrt[n]{x}|。
+分式用 \verb|\frac{a}{b}|，引用宏包amsmath，可以使用\verb|\dfrac{a}{b}|，这个命令不会压缩行内高度。
+根式用 \verb|\sqrt{x}| 或 \verb|\sqrt[n]{x}|。
 
 \section{公式-上下标}
-上标用 \verb|^|，下标用 \verb|_|，同时上下标用 \verb|x_i^2|。
+上标用 \verb|^{}|，下标用 \verb|_{}|，同时上下标用 \verb|x_{i}^{2}|。
 
 \section{公式-上下线}
-上划线用 \verb|\overline|，下划线用 \verb|\underline|，
-上下括号用 \verb|\overbrace|、\verb|\underbrace|。
+描述向量的命令是 \verb|\vec{a}|、\verb|\boldsymbol{a}| 或 \verb|\overrightarrow{AB}|，编译后为
+$\vec{a}$、$\boldsymbol{a}$、$\overrightarrow{AB}$。
+上划线用 \verb|\overline{AB}|，下划线用 \verb|\underline{CD}|，编译后为$\overline{AB}$，$\underline{CD}$。
+或者命令 \verb|\bar{x}|还有\verb|\hat{a}|,编译后为$\bar{x}$，$\hat{a}$。
+
+上下括号用 \verb|\overbrace{(a + a + \cdots + a)}^{\text{$n$个$a$}}|和\\
+\verb|\underbrace{(b + b + \cdots + b)}_{\text{$n$个$b$}}|。\\
+编译后为$\overbrace{(a + a + \cdots + a)}^{\text{$n$个$a$}}$和$\underbrace{(b + b + \cdots + b)}_{\text{$n$个$b$}}$。
+
 
 \section{公式-求和与公式样式调整}
-求和用 \verb|\sum|，可加 \verb|\limits| 控制上下限位置，
-用 \verb|\displaystyle| 调整公式样式。
+求和公式用\verb|\sum|命令，比如\verb|S_{n} = \sum_{i=0}^{\infty} a_n|,编译后为：
+\[
+  S_{n} = \sum_{i=0}^{\infty} a_n
+\]
+\verb|\sum|命令的下标如果要换行，需要使用\verb|\substack{argument}|命令,，比如：\\
+\verb|\sum_{\substack{0<i<n\\0<j<m}} A_{ij}|，编译后为
+\[
+\sum_{\substack{0<i<n\\0<j<m}} A_{ij}
+\]
+
+通过命令\verb|\sum\limits_{}^{}|能够保证行内公式完整表达。\\
+还可以使用\verb|\displaystyle |这个命令是让行内公式以行间公式表达。
+
+命令\verb|\smashoperator{}|会设置花括号中的元素以适度长度。
+命令\verb|\mathstrut|会帮助整理符号的高度。
+命令\verb|\uproot{argument}|会上移花括号后的元素argument长度，命令\verb|\leftroot{argument}|同理。
 
 \section{公式-积分}
-积分用 \verb|\int|，多重积分用 \verb|\iint|、\verb|\iiint|。
+极限使用命令\verb|\lim_{}|，比如\\
+\verb|\lim_{x \rightarrow(\to) 0} \dfrac{\sin x}{x} = 0|，编译后为：
+\[
+  \lim_{x \rightarrow 0} \dfrac{\sin x}{x} = 0
+\]
+
+不定积分的命令是\verb|\int|，比如\verb|\int x \mathrm{d}x|
+，编译后为：
+\[
+\int x \mathrm{d}x
+\]
+
+定积分命令是\verb|\int_{}^{}|，比如\verb|\int_{0}^{1} \sqrt{1 - x^2}\mathrm{d}x|，编译后为：
+\[
+  \int_{0}^{1} \sqrt{1 - x^2}\mathrm{d}x
+\]
+
+二重积分和三重积分的命令是\verb|\iint|和\verb|\iiint|，环路积分命令是\verb|\oint|。
+
+为公式带方框可用命令\verb|\boxed{}|，花括号内为需要加方框的内容。
+
+写公式时，如果要括号，使用命令 \verb|\left( 和 \right)|，比如：
+
+\begin{verbatim}
+\left( \dfrac{\partial Q}{\partial x}
+      - \dfrac{\partial P}{\partial y} \right)
+\end{verbatim}
+
+编译结果为：
+\[
+  \left ( \dfrac{\partial Q}{\partial x} - \dfrac{\partial P}{\partial y} \right )
+\]
+
+方括号和花括号同理，命令为\verb|\left [ , \right ]| 和 \verb|\left \{ , \right \}|，竖线也可以使用，
+命令为 \verb!\left\| , \right\|!。
 
 \section{公式-矩阵}
 矩阵用 \verb|matrix|、\verb|pmatrix|、\verb|bmatrix| 等环境。
