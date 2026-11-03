@@ -25,6 +25,7 @@
 % ===== 数学 =====
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{mathtools}
 
 % ===== 图片 =====
 \usepackage{graphicx}
@@ -825,13 +826,129 @@ $\vec{a}$、$\boldsymbol{a}$、$\overrightarrow{AB}$。
 命令为 \verb!\left\| , \right\|!。
 
 \section{公式-矩阵}
-矩阵用 \verb|matrix|、\verb|pmatrix|、\verb|bmatrix| 等环境。
+生成矩阵需要array宏包，使用\verb|\begin{array}{列格式}...\end{array}|，列格式有c l r表示居中、左、右对齐。
+比如代码：
+
+\begin{center}
+  \begin{verbatim}
+    \[
+       A = \left (
+        \begin{array}{c c c}
+          11&12&13\\
+          21&22&23\\
+          31&32&33\\    
+        \end{array}
+      \right ) 
+    \]
+
+  \end{verbatim}  
+\end{center}
+
+编译后为：
+
+\begin{center}
+  \[
+    A = \left (
+      \begin{array}{c c c}
+        11&12&13\\
+        21&22&23\\
+        31&32&33\\    
+      \end{array}
+    \right )
+  \]
+\end{center}
+
+\vspace*{\baselineskip}
+
+矩阵还可以用 \verb|matrix|、\verb|pmatrix|、\verb|bmatrix| 、\verb|Bmatrix|、\verb|vmatrix| 、\verb|Vmatrix| 等环境，分别表示无括号、圆括号、方括号、大括号、单竖线、双竖线。
+
+\vspace*{\baselineskip}
+
+导入宏包tabularray后，通过\verb|\UseTblrLibrary{amsmath}|导入包后，
+可以使用\verb|+matrix|、\verb|+pmatrix|、\verb|+bmatrix|、\verb|+Bmatrix|、\verb|+vmatrix|、\verb|+Vmatrix|环境，来优化矩阵的排版。
+这些环境还可以通过\verb|{环境}[样式设置]|来设置矩阵的样式。
+
 
 \section{公式-多行公式}
-多行公式用 \verb|align| 或 \verb|gather| 环境，用 \verb|&| 对齐。
+在数学模式中，多行公式可以使用\verb|split|环境。比如代码：
+\begin{center}
+  \begin{verbatim}
+    \[
+      \begin{split}
+        (a + b)^3 &= (a + b)(a + b)^2 \\
+                  &= (a + b)(a^2 + 2ab + b^2) \\
+                  &= a^3 + 3a^2b + 3ab^2 + b^3
+      \end{split}
+    \]
+  \end{verbatim}
+\end{center}
+编译后为： 
+\begin{center}
+  \[
+    \begin{split}
+      (a + b)^3 &= (a + b)(a + b)^2 \\
+                &= (a + b)(a^2 + 2ab + b^2) \\
+                &= a^3 + 3a^2b + 3ab^2 + b^3
+    \end{split}
+  \]
+\end{center}
+
+\vspace*{\baselineskip}
+
+使用dmath宏包后，可以使用\verb|dmath|环境，它会自动换行并对齐等号。它还会自动生成序号，使用\verb|dmath*|环境就不会生成序号了。
+
+\vspace*{\baselineskip}
+
+使用array环境也可以生成多行公式，使用\verb|&|对齐，使用\verb|\\|换行。比如：
+\begin{center}
+  \begin{verbatim}
+    \left \{
+      \begin{array}{l c r}
+        x + y + z & = & 10 \\
+        x - y - z & = & -5 \\
+        2x + 3y + 4z & = & 35 \\
+      \end{array} 
+    \right .
+  \end{verbatim}
+\end{center}
+编译后为：
+\begin{center}
+  \[
+    \left \{
+      \begin{array}{l c r}
+        x + y + z & = & 10 \\
+        x - y - z & = & -5 \\
+        2x + 3y + 4z & = & 35 \\
+      \end{array}
+    \right .
+  \]
+\end{center}
 
 \section{公式-分支公式}
-分支公式用 \verb|cases| 环境。
+有分支的公式可以使用前面的array环境或split环境，也可以使用\verb|cases|环境。比如：
+\begin{center}
+  \begin{verbatim}
+    \[
+        f(x) = \begin{dcases}
+          \dfrac{1}{2} x^2, & x \leqslant 0 \\
+          \dfrac{1}{3} \ln x, & 0 < x < 10 \\
+          \dfrac{1}{10} \sqrt{x}, & x \geqslant 10
+        \end{dcases}
+    \]
+  \end{verbatim}
+\end{center}
+编译后为：
+\begin{center}
+  \[
+    f(x) = \begin{dcases}
+      \dfrac{1}{2} x^2, & x \leqslant 0 \\
+      \dfrac{1}{3} \ln x, & 0 < x < 10 \\
+      \dfrac{1}{10} \sqrt{x}, & x \geqslant 10
+    \end{dcases}
+  \]
+\end{center}
+
+使用dcases环境需要导入mathtools宏包。cases环境自动添加左括号，dcases环境会自动添加左括号并且在行间公式中使用较大的字体，使用rcases环境会自动添加右括号。
 
 \section{公式-定理环境与cleveref引用}
 定理环境用 \verb|amsthm| 宏包，引用可用 \verb|cleveref| 宏包自动识别类型。
