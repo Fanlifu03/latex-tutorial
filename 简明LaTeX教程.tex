@@ -951,23 +951,77 @@ $\vec{a}$、$\boldsymbol{a}$、$\overrightarrow{AB}$。
 使用dcases环境需要导入mathtools宏包。cases环境自动添加左括号，dcases环境会自动添加左括号并且在行间公式中使用较大的字体，使用rcases环境会自动添加右括号。
 
 \section{公式-定理环境与cleveref引用}
-定理环境用 \verb|amsthm| 宏包，引用可用 \verb|cleveref| 宏包自动识别类型。
+环境\verb|\newtheorem{环境名}[计数器]{显示名}[编号层次]|可以定义定理环境，计数器可以是section、subsection等，编号层次可以是section、subsection等。
+
+比如\verb|\newtheorem{definition}{定义}|、\verb|\newtheorem{theorem}{定理}|、\\\verb|\newtheorem{lemma}{引理}|、\verb|\newtheorem{corollary}{推论}|、\\\verb|\newtheorem{proposition}{命题}|、\verb|\newtheorem{example}{例}|、\\\verb|\newtheorem{remark}{注}|等。
+
+编号层次有chapter、section表示按章、节编号，subsection表示按小节编号，none表示不编号。
+
+证明环境需要导入amsthm宏包，使用\verb|\begin{proof}[标题]...\end{proof}|环境。
 
 % ==================== 文档结构部分 ====================
 
 \section{章节标题与目录}
-用 \verb|\section|、\verb|\subsection| 等命令生成标题和目录，
-用 \verb|\tableofcontents| 生成目录。
+在排版文档时，需要把文章和书籍划分为不同的层次，就是章、节、小节等。在LaTex三个标准文档类article、report、book中，
+为我们提供了 \verb|\part|、\verb|\chapter|、\verb|\section|、\verb|\subsection|、\verb|\subsubsection|、\verb|\paragraph|、\verb|\subparagraph| 等命令。
+其中，\verb|article| 文档类没有 \verb|\chapter| 命令，\verb|report| 和 \verb|book| 文档类有 \verb|\chapter| 命令。
+
+\verb|article|文档类带编号的章节标题命令有 \verb|\section|、\verb|\subsection|、\\\verb|\subsubsection|、\verb|\paragraph|、\verb|\subparagraph|，不带编号的章节标题命令有\\ \verb|\section*|、\verb|\subsection*|、\verb|\subsubsection*|、\verb|\paragraph*|、\verb|\subparagraph*|。
+
+\verb|report|和\verb|book|文档类带编号的章节标题命令有 \verb|\chapter|、\\\verb|\section|、\verb|\subsection|、\verb|\subsubsection|、\verb|\paragraph|、\verb|\subparagraph|，不带编号的章节标题命令有 \verb|\chapter*|、\verb|\section*|、\verb|\subsection*|、\verb|\subsubsection*|、\\\verb|\paragraph*|、\verb|\subparagraph*|。
+
+比如book类代码：
+
+\begin{center}
+  \begin{abstract}
+    \begin{verbatim}
+      \documentclass[12pt,a4paper]{ctexbook}
+      \begin{document}
+        \part{\LaTex 基础部分}
+          \chapter{基础知识}
+            \section{文档结构}
+        \part{\LaTex 进阶部分}
+          \chapter{数学公式}
+            \section{公式排版}
+      \end{document}
+    \end{verbatim}
+  \end{abstract}
+\end{center}
+
+层次结构生成后，还要生成目录，使用 \verb|\tableofcontents| 命令，表格的目录使用 \verb|\listoftables| 命令，图片的目录使用 \verb|\listoffigures| 命令。
 
 \section{文档结构-前言正文附录后记}
-用 \verb|\frontmatter|、\verb|\mainmatter|、\verb|\backmatter| 划分文档结构，
-用 \verb|\appendix| 开始附录。
+如果想要把目录也放入目录中，可以使用 \verb|\addcontentsline{toc}{section}{目录}| 命令。
+
+LaTeX 文档结构分为前言、正文、附录和后记四个部分。
+
+前言部分通常包括封面、摘要、目录等，使用命令\verb|\frontmatter|，页码通常使用罗马数字 i、ii、iii 等，其后的\verb|\chapter|不带编号。
+
+正文部分通常包括正文内容，使用命令\verb|\mainmatter|，页码通常使用阿拉伯数字 1、2、3 等，其后的\verb|\chapter|带编号。
+
+后记部分通常包括参考文献、索引等，使用命令\verb|\backmatter|，页码通常使用阿拉伯数字 1、2、3 等，其后的\verb|\chapter|不带编号。
+
+附录部分通常包括附录内容，使用命令\verb|\appendix|，页码通常使用阿拉伯数字 1、2、3 等，其后的\verb|\chapter|带编号。
 
 \section{文档拆分}
-用 \verb|\include| 或 \verb|\input| 把大文档拆成多个文件。
+把一个文档拆分为多个文档管理，常用的方法是按chapter或section拆分。
+
+使用 \verb|\include| 或 \verb|\input| 命令导入子文档。\verb|\include{}| 命令会在导入的子文档前后自动分页，\verb|\input{}| 命令不会自动分页。
 
 \section{页眉页脚}
-用 \verb|fancyhdr| 宏包自定义页眉页脚。
+使用命令\verb|\pagenumbering{numstyle}|，表示重置页码。numstyle有arabic、roman、Roman、alph、Alph等，分别表示阿拉伯数字、罗马小写数字、罗马大写数字、小写字母、大写字母。
+
+文档中修改页眉和页脚的命令是\verb|\pagestyle{<page-style>}|用于设置页眉页脚样式，\verb|\thispagestyle{<page-style>}|用于设置当前页的页眉页脚样式。
+page-style有plain、empty、headings、myheadings等，分别表示空白页眉页脚、空白页眉页脚、章节标题页眉页脚、自定义页眉页脚。
+
+想要自行修改页眉页脚，可以使用 \verb|fancyhdr| 宏包，使用命令\\\verb|\fancyhead[位置]{内容}|和\verb|\fancyfoot[位置]{内容}|设置页眉页脚内容。
+位置有E和O,L、C、R，分别表示奇数页左、中、右和偶数页左、中、右。使用\verb|fancyhdr| 宏包，需要先运行命令\\
+\verb|\pagestyle{fancy}|，然后再设置页眉页脚内容。
+
+\verb|fancyhdr| 宏包还可以使用命令\verb|\fancyhf[<position>]{<content>}|设置页眉页脚内容，位置可以是H、F与E、O与L、C、R的组合，分别表示页眉、页脚、奇数页、偶数页、左、中、右。
+
+通过命令\verb|\renewcommand{\headrulewidth}{0pt}|和\\
+\verb|\renewcommand{\footrulewidth}{0pt}|可以设置页眉页脚的横线宽度。
 
 \section{参考文献}
 用 \verb|thebibliography| 环境或 \verb|bibtex|、\verb|biblatex| 管理参考文献。
