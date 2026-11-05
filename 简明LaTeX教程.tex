@@ -1024,7 +1024,44 @@ page-style有plain、empty、headings、myheadings等，分别表示空白页眉
 \verb|\renewcommand{\footrulewidth}{0pt}|可以设置页眉页脚的横线宽度。
 
 \section{参考文献}
-用 \verb|thebibliography| 环境或 \verb|bibtex|、\verb|biblatex| 管理参考文献。
+LaTex提供自动生成参考文献的功能，自动生成首先需要准备一个.bib文件，里面存放参考文献条目。然后在文档中使用\verb|\bibliography{文件名}|命令引用参考文献。
+
+.bib文件的内容是若干个文献条目，每个条目的格式为：
+
+\begin{center}
+  \begin{verbatim}
+    @<type>{<citation>,
+      <key1> = {<value1>},
+      <key2> = {<value2>},
+      ...
+    }
+  \end{verbatim}
+
+\end{center}
+
+其中<type>表示文献类型，如article、book、inproceedings等，<citation>为\verb|\cite|命令使用的引用标识符。
+<key>是文献条目的字段名，如author、title、year等，<value>是字段的值。
+
+我们简要介绍几种常用的文献类型：
+\begin{itemize}
+  \item article：期刊文章，必须字段有author、title、journal、year；常用字段有volume、number、pages等。
+  \item book：书籍，必须字段有author或editor、title、publisher、year；常用字段有volume或number、series、address等。
+  \item inproceedings：会议论文，必须字段有author、title、booktitle、year；常用字段有editor、volume或number、series、pages等。
+  \item misc：其他类型，常用字段有author、title、howpublished、year等。
+  \item online：网络资源，常用字段有author、title、year、url、urldate等。
+\end{itemize}
+
+在引用时需要在导言区使用\verb|\bibliographystyle{text}|命令指定参考文献样式，text为样式名称，如plain、unsrt、alpha、abbrv等。
+中文文献可以使用gbt7714-2015、gbt7714-2005、gbt7714-2006等样式。要使用中文文献样式，需要在导言区使用\verb|\usepackage{gbt7714}|命令。
+
+在需要引用参考文献的区域最下方使用\verb|\bibliography{<file>}|命令来引用参考文献，使用\verb|\cite{citation}|命令进行引用，其中citation为.bib文件中对应文献条目的引用标识符。
+
+在本地用命令行编译时，先运行\verb|pdflatex <file>.tex|，然后运行\verb|bibtex <file>|，再运行两次\verb|pdflatex <file>.tex|，即可生成参考文献。
+
+biblatex宏包提供了更强大的参考文献管理功能，使用方法与bibtex类似，使用时需要在导言区使用\verb|\usepackage[backend=biber,style=gb7714-2015]{biblatex}|命令加载biblatex宏包，并指定参考文献样式。
+再使用\verb|\addbibresource{<file>.bib}|命令添加参考文献数据库文件，使用\verb|\printbibliography|命令打印参考文献列表。
+可以使用\verb|\cite{citation}|命令进行引用，其中citation为.bib文件中对应文献条目的引用标识符。还可以使用\verb|\citeauthor{citation}|命令引用作者，\verb|\citeyear{citation}|引用年份，
+\verb|textcite{citation}|命令引用作者和年份，\verb|parencite{citation}|命令将角标写入行内，\verb|footcite{citation}|命令在脚注中引用。
 
 \section{索引}
 用 \verb|makeidx| 或 \verb|imakeidx| 宏包生成索引。
